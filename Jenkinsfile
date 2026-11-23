@@ -10,7 +10,7 @@ pipeline {
     }
 
     environment {
-        DOCKERHUB_USER = '<saichand6664>'     // <-- change this
+        DOCKERHUB_USER = 'saichand6664'     // <-- change this
         IMAGE_NAME     = "${DOCKERHUB_USER}/flask-app"
         K8S_NAMESPACE  = 'flask-app'
     }
