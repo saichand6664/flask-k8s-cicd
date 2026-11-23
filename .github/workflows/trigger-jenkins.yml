@@ -1,0 +1,29 @@
+name: Trigger Jenkins -> Docker build -> K8s deploy
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:          # allows manual run from the Actions tab
+
+jobs:
+  trigger-jenkins:
+    # Jenkins is on the home LAN, so GitHub's cloud runners can't reach it.
+    # A self-hosted runner installed on the homelab can call it on localhost.
+    runs-on: self-hosted
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Trigger Jenkins and wait for result
+        env:
+          JENKINS_URL:   ${{ secrets.JENKINS_URL }}
+          JENKINS_USER:  ${{ secrets.JENKINS_USER }}
+          JENKINS_TOKEN: ${{ secrets.JENKINS_TOKEN }}
+          JENKINS_JOB:   ${{ secrets.JENKINS_JOB }}
+          GIT_SHA:       ${{ github.sha }}
+          GIT_BRANCH:    ${{ github.ref_name }}
+        run: |
+          chmod +x scripts/trigger_jenkins.sh
+          ./scripts/trigger_jenkins.sh
