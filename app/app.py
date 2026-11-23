@@ -10,7 +10,7 @@ VERSION = os.getenv("APP_VERSION", "dev")
 @app.route("/")
 def home():
     return jsonify(
-        message="Hello from Flask on Kubernetes!",
+        message="Deployed via GitHub Actions + Jenkins!",
         version=VERSION,
         pod=socket.gethostname(),
     )
